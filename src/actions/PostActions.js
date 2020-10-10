@@ -9,13 +9,14 @@ export const ACTION_TYPES = {
 }
 
 
-export const fetchALL = () =>
+export const fetchAll = () =>
 {
     return dispatch => 
     {
-        api.Post.fetchALL()
+        api.Post().fetchAll()
         .then(
             response =>{
+                console.log(response)
                 dispatch({
                     type:ACTION_TYPES.FETCH_ALL,
                     payload: response.data

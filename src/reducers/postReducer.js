@@ -1,15 +1,15 @@
 import { ACTION_TYPES } from "../actions/PostActions"
 
-const initialState={
+const initialState = {
     list:[]
 }
 
 
-export const posts = (state=initialState, action) =>{
+export const posts = (state=initialState, action) => {
 
     switch (action.type) {
         case ACTION_TYPES.FETCH_ALL:
-            return{
+            return {
                 ...state,
                 list:[...action.payload]
             }
