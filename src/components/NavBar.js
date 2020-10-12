@@ -11,11 +11,7 @@ export default function NavBar() {
   <Toolbar>
     <IconButton edge="start" className="" color="inherit" aria-label="menu">
       <Menu/>
-    </IconButton>
-    <Typography variant="h6" className="">
-      My Blog  
-    </Typography>
-            <Link to="/">
+      <Link to="/">
                     <Button>
                              Home
                      </Button>       
@@ -25,6 +21,11 @@ export default function NavBar() {
                         Create Post
                 </Button>       
             </Link>
+    </IconButton>
+    <Typography variant="h6" className="">
+      My Blog  
+    </Typography>
+            
 
   </Toolbar>
 </AppBar>

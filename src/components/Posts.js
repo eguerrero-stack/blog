@@ -4,10 +4,13 @@ import * as actions from "../actions/PostActions"
 import {Paper, Card, CardActionArea, CardActions, CardMedia, CardContent, Typography, Button, Grid, withStyles} from "@material-ui/core"
 
 /*
+Gamer Blog To Do List
 
-PostForm may not go side by side with the blog posts. 
-I believe a seperate form page and a home blog tile page with a top navbar would be perfect.
-I believe these components may be separated better
+We need to keep the max recent blog posts to like 3 or 4,
+Clickable link to view all blogs in a different component
+Fix broken images
+Move Links to the right side of top navbar or open a side tab
+
 
 */
 
@@ -36,7 +39,7 @@ const Posts = ({classes, ...props}) => {
 
     return (
         <Paper elevation={3}>
-        <Grid container>
+        <Grid container >
             <Grid className={classes.grid} item xs={8}>
             <Card className="">
       <CardActionArea>
@@ -63,7 +66,7 @@ const Posts = ({classes, ...props}) => {
       </CardActions>
     </Card>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={3} >
                 Top of Card PostsList
                 {
                     props.PostsList.map((post, index)=>{
@@ -107,7 +110,7 @@ const mapStateToProps = state =>(
 )
 
 const mapActionToProps = {
-    fetchAllPosts: actions.fetchAll
+    fetchAllPosts: actions.FetchAll
 }
 
 
