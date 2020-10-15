@@ -37,15 +37,25 @@ const initialFieldValues = {
 }
 
 
-const PostsForm = ({classes,...props}) => {
-console.log('props', props)
+const EditForm = ({classes,...props}) => {
+console.log('Edit props', props)
 // useEffect(() => {
 //     if(props.id !== 0)
 //     setValues({
 //         ...props.PostsList.find(x => x.id === props.id)
 //     })
 // }, [props.id])
-
+useEffect(() => {
+   let editPost = props.getPost(props.match.params.id)
+   console.log('This is the post',editPost)
+//    let post = editPost.data;
+//    initialFieldValues = {
+//        Title : post.title,
+//        Subtitle : post.subtitle,
+//        Description : post.description,
+//        Tags : post.tags
+//    }
+}, [])
 
 const validate = (fieldValues = values) => {
     let temp = {};
@@ -190,10 +200,10 @@ const mapStateToProps = (state, ownProps) =>(
 const mapActionToProps = {
     createPost: actions.Create,
     updatePost: actions.Update,
-
+    getPost : actions.FetchById
 }
 
 
 
 
-export default connect(mapStateToProps, mapActionToProps)(withStyles(styles)(PostsForm));
+export default connect(mapStateToProps, mapActionToProps)(withStyles(styles)(EditForm));

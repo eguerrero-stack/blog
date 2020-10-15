@@ -5,7 +5,8 @@ export const ACTION_TYPES = {
    CREATE : 'CREATE',
    UPDATE: 'UPDATE',
    DELETE: 'DELETE',
-   FETCH_ALL:'FETCH_ALL'
+   FETCH_ALL:'FETCH_ALL',
+   FETCH_BY_ID: 'FETCH_BY_ID'
 }
 
 // const formatData = data => ({
@@ -31,6 +32,23 @@ export const FetchAll = () =>
     }
 }
 
+export const FetchById = id =>
+{
+    return dispatch => 
+    {
+        api.Post().fetchById(id)
+        .then(
+            response =>{
+                console.log('singlepost', response)
+                dispatch({
+                    type:ACTION_TYPES.FETCH_BY_ID,
+                    payload: response.data
+                })
+            }
+        )
+        .catch(err=> console.log(err))
+    }
+}
 export const Create = (data, onSuccess) => dispatch => {
 api.Post().create(data)
 .then(res => {

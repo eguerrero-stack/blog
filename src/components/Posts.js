@@ -1,7 +1,9 @@
 import React, { useState, useEffect} from 'react';
 import { connect } from "react-redux";
 import * as actions from "../actions/PostActions"
-import {Paper, Card, CardActionArea, CardActions, CardMedia, CardContent, Typography, Button, Grid, withStyles} from "@material-ui/core"
+import {Paper, Card, CardActionArea, CardActions, CardMedia, CardContent, Typography, Button, Grid, withStyles, ButtonGroup} from "@material-ui/core"
+import Edit from "@material-ui/icons/Edit";
+import Delete from "@material-ui/icons/Delete";
 
 /*
 Gamer Blog To Do List
@@ -20,18 +22,24 @@ const styles = theme => ({
         "& .MuiTypography-h6": {
             fontSize: "1rem",
             lineHeight: 0,
-            fontWeight: 300
-
-        }
+            fontWeight: 300,           
+        },
+        // "& .Posts-root-1":{
+        //   margin: theme.spacing(3),
+        // }
     },
     grid:{
         margin:theme.spacing(2),
         padding:theme.spacing(1)
+    },
+    card:{
+      
     }
-    
 })
 
+
 const Posts = ({classes, ...props}) => {
+// const [currentId, setCurrentId] = useState(0);
 
     useEffect(() => {
         props.fetchAllPosts()},
@@ -66,36 +74,53 @@ const Posts = ({classes, ...props}) => {
       </CardActions>
     </Card>
             </Grid>
-            <Grid item xs={3} >
+            <Grid item xs={3} direction="column" className={classes.root} style={{marginBottom : '5px'}}>
                 Top of Card PostsList
                 {
                     props.PostsList.map((post, index)=>{
+                      if(index < 3){
                         return(
-                            <Card key ={index} className={classes.root}>
+                            <Card key ={index} >
                             <CardActionArea >
                               <CardMedia
                                 component="img"
                                 height="150"
-                                image="../images/332687.jpg"
-                                title="League Of Legends"
+                                image=""
+                                title=""
                               />
                               <CardContent >
                                 <Typography gutterBottom variant="h6" component="h6">
                                   {post.title}
                                 </Typography>
+                                <ButtonGroup variant="text">
+                                  <Button>
+                                      <Edit  post={post} color="primary"onClick={() =>{
+                                        
+                                        // setCurrentId(post.id)
+                                        props.history.push({
+                                          pathname: `/post/${post.id}`,
+                                          ...post
+
+                                        })
+                                        }}/>
+                                  </Button>
+                                  <Button>
+                                      <Delete color="danger"/>
+                                  </Button>
+                                </ButtonGroup>
                               </CardContent>
                             </CardActionArea>
                           </Card>
-                        )
+                        )}
+                        else
+                        {
+                          return <div></div>
+                        }
+                       
                     })
                 }
-                
-
 
             </Grid>
-
-
-
         </Grid>
         </Paper>
     )

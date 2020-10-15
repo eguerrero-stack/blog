@@ -3,6 +3,7 @@ import "./App.css";
 import { store } from "./actions/store";
 import { Provider } from "react-redux";
 import Posts from './components/Posts';
+import EditForm from './components/EditForm';
 import NavBar from './components/NavBar';
 import PostForm from './components/PostForm';
 // import Error from "./components/Error";
@@ -16,7 +17,9 @@ function App() {
     <Switch>
         <Container maxWidth="lg">
           <Route  path="/" component={Posts} exact/>
-          <Route path="/post" component={PostForm}/>
+          <Route path="/post" component={PostForm} exact/>
+          <Route path="/post/:id" component={EditForm} />
+
             {/* <Route component={Error}/> */}
         </Container>
     </Switch>
