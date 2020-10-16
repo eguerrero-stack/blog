@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { connect } from "react-redux";
 import * as actions from "../actions/PostActions"
 import {Paper, Card, CardActionArea, CardActions, CardMedia, CardContent, Typography, Button, Grid, withStyles, ButtonGroup} from "@material-ui/core"
@@ -12,8 +12,9 @@ Gamer Blog To Do List
 Clickable link to view all blogs in a different component
 Fix broken images
 Move Links to the right side of top navbar or open a side tab
-
-
+Work on making the Edit and Create forms into the same component
+Edit form is only adding the one field that is changed
+look into useRef for keeping values in EditForm
 */
 
 const styles = theme => ({
@@ -41,8 +42,13 @@ const styles = theme => ({
 const Posts = ({classes, ...props}) => {
 // const [currentId, setCurrentId] = useState(0);
 
+const postId = useRef(0);
+
+  console.log('props',props)
     useEffect(() => {
-        props.fetchAllPosts()},
+      console.log('firing effect')
+        props.fetchAllPosts()
+      },
          []);//Component did mount
 
     return (
@@ -74,13 +80,14 @@ const Posts = ({classes, ...props}) => {
       </CardActions>
     </Card>
             </Grid>
-            <Grid item xs={3} direction="column" className={classes.root} style={{marginBottom : '5px'}}>
-                Top of Card PostsList
+            <Grid container item xs={3} direction="column" className={classes.root} style={{marginBottom : '5px'}}>
+                Recent Blogs
                 {
-                    props.PostsList.map((post, index)=>{
+                    props.PostsList.reverse().map((post, index)=>{
+                      console.log(post)
                       if(index < 3){
                         return(
-                            <Card key ={index} >
+                            <Card key ={index}  ref={postId} >
                             <CardActionArea >
                               <CardMedia
                                 component="img"
@@ -94,18 +101,17 @@ const Posts = ({classes, ...props}) => {
                                 </Typography>
                                 <ButtonGroup variant="text">
                                   <Button>
-                                      <Edit  post={post} color="primary"onClick={() =>{
-                                        
+                                      <Edit  color="primary" onClick={(e) =>{
+                                        // console.log("this the component", e.target)
                                         // setCurrentId(post.id)
                                         props.history.push({
                                           pathname: `/post/${post.id}`,
-                                          ...post
-
+                                            postId : postId
                                         })
                                         }}/>
                                   </Button>
                                   <Button>
-                                      <Delete color="danger"/>
+                                      <Delete color="error"/>
                                   </Button>
                                 </ButtonGroup>
                               </CardContent>
@@ -114,7 +120,7 @@ const Posts = ({classes, ...props}) => {
                         )}
                         else
                         {
-                          return <div></div>
+                          return ''
                         }
                        
                     })

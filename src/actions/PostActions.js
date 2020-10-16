@@ -9,10 +9,6 @@ export const ACTION_TYPES = {
    FETCH_BY_ID: 'FETCH_BY_ID'
 }
 
-// const formatData = data => ({
-//     ...data,
-    
-// })
 
 export const FetchAll = () =>
 {
@@ -21,7 +17,6 @@ export const FetchAll = () =>
         api.Post().fetchAll()
         .then(
             response =>{
-                console.log(response)
                 dispatch({
                     type:ACTION_TYPES.FETCH_ALL,
                     payload: response.data

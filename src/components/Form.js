@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Grid, TextField, withStyles,FormControl, InputLabel, Select, Button,Paper, MenuItem, FormHelperText} from "@material-ui/core"
 import useForm from './useForm'
 import { connect } from "react-redux";
@@ -37,18 +37,32 @@ const initialFieldValues = {
 }
 
 
-const PostsForm = ({classes,...props}) => {
-console.log('props', props)
-// useEffect(() => {
-//     if(props.id !== 0)
-//     setValues({
-//         ...props.PostsList.find(x => x.id === props.id)
-//     })
-// }, [props.id])
+const Form = ({classes,...props}) => {
+const [currentId, setCurrentId] = useState(0);
+// console.log('this is the current Id', currentId)
+console.log('props.post',props)
+const postId = props.match.params.id;
+console.log('postId',postId)
 
-//Creates an error for not typing in a mandatory field
+const postToUpdate = props.post
+
+useEffect(() => {
+
+    if(postId !== 0 && postId !== undefined){
+        setCurrentId(postId)
+        console.log('current Id changed')
+        props.getPost(postId)
+    }
+
+}, [])
+
+useEffect(() => {
+    setValues({postToUpdate})
+}, [postToUpdate])
+
+
+
 const validate = (fieldValues = values) => {
-    console.log('values',values)
     let temp = {};
     if('Title' in fieldValues)
     temp.Title = fieldValues.Title ? "" : "This field is required"
@@ -56,7 +70,6 @@ const validate = (fieldValues = values) => {
     temp.Description = fieldValues.Description ? "" : "This field is required"
     if('Tags' in fieldValues)
     temp.Tags = fieldValues.Tags ? "" : "This field is required"
-    // temp.email = (/^$|.+@.+..+/).test(values.email) ? "" : This field is not valid this is how to validate email in regular expression
     setErrors({
         ...temp,
     })
@@ -83,10 +96,12 @@ const {
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log(values)
 
         if(validate()){
-            props.createPost(values, () =>{window.alert('inserted')})
+            if(currentId !== 0 )
+                props.updatePost(postId, values, () =>{window.alert('updated')})
+            else
+            props.createPost(values, () =>{window.alert('inserted')})   
         }
     }
 
@@ -183,6 +198,7 @@ const {
 
 const mapStateToProps = (state) =>(
     {
+        post: state.posts.singlePost,
         PostsList: state.posts.list,
     }
 )
@@ -190,10 +206,10 @@ const mapStateToProps = (state) =>(
 const mapActionToProps = {
     createPost: actions.Create,
     updatePost: actions.Update,
-
+    getPost : actions.FetchById
 }
 
 
 
 
-export default connect(mapStateToProps, mapActionToProps)(withStyles(styles)(PostsForm));
+export default connect(mapStateToProps, mapActionToProps)(withStyles(styles)(Form));

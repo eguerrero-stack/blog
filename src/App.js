@@ -6,6 +6,8 @@ import Posts from './components/Posts';
 import EditForm from './components/EditForm';
 import NavBar from './components/NavBar';
 import PostForm from './components/PostForm';
+import Form from './components/PostForm';
+
 // import Error from "./components/Error";
 import {  Container  } from "@material-ui/core";
 import { Switch, Route} from "react-router-dom";

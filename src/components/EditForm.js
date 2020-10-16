@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Grid, TextField, withStyles,FormControl, InputLabel, Select, Button,Paper, MenuItem, FormHelperText} from "@material-ui/core"
 import useForm from './useForm'
 import { connect } from "react-redux";
@@ -28,35 +28,43 @@ const styles = theme =>({
 })
 
 
-const initialFieldValues = {
-    Title: '',
-    Subtitle: '',
-    Description:'',
-    Tags:''
+
+
+
+const EditForm = ({classes,...props}) => {
+const [currentId, setCurrentId] = useState(0);
+// console.log('this is the current Id', currentId)
+console.log('props',props)
+const postId = props.match.params.id;
+console.log('postId',postId)
+
+const postToUpdate = props.post
+
+useEffect(() => {
+
+    if(postId !== 0){
+        setCurrentId(postId)
+        console.log('current Id changed')
+        props.getPost(postId)
+    }
+
+}, [])
+
+useEffect(() => {
+    setValues({postToUpdate});
+    initialFieldValues = postToUpdate
+}, [currentId])
+
+let initialFieldValues = {
+    Title: postToUpdate.title,
+    Subtitle: postToUpdate.subtitle,
+    Description:postToUpdate.description,
+    Tags:postToUpdate.tags
     
 }
 
 
-const EditForm = ({classes,...props}) => {
-console.log('Edit props', props)
-// useEffect(() => {
-//     if(props.id !== 0)
-//     setValues({
-//         ...props.PostsList.find(x => x.id === props.id)
-//     })
-// }, [props.id])
-useEffect(() => {
-   let editPost = props.getPost(props.match.params.id)
-   console.log('This is the post',editPost)
-//    let post = editPost.data;
-//    initialFieldValues = {
-//        Title : post.title,
-//        Subtitle : post.subtitle,
-//        Description : post.description,
-//        Tags : post.tags
-//    }
-}, [])
-
+//Instead of checking for a value maybe check if the value is not the same as it was before or add two checks?
 const validate = (fieldValues = values) => {
     let temp = {};
     if('Title' in fieldValues)
@@ -73,7 +81,6 @@ const validate = (fieldValues = values) => {
 if(fieldValues === values){
     let isValidated = Object.values(temp).every( x => x === "")
 
-    console.log('isvalidated',isValidated)
     return isValidated;
 }
     
@@ -95,7 +102,7 @@ const {
         e.preventDefault();
 
         if(validate()){
-            props.createPost(values, () =>{window.alert('inserted')})
+            props.updatePost(postId, values, () =>{window.alert('updated')})
         }
     }
 
@@ -190,15 +197,14 @@ const {
 }
 
 
-const mapStateToProps = (state, ownProps) =>(
+const mapStateToProps = (state) =>(
     {
-        PostsList: state.posts.list,
-        PostId : ownProps.match.params.currentId
+        post: state.posts.singlePost,
+        
     }
 )
 
 const mapActionToProps = {
-    createPost: actions.Create,
     updatePost: actions.Update,
     getPost : actions.FetchById
 }
