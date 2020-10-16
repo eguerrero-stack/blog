@@ -8,7 +8,7 @@ import Delete from "@material-ui/icons/Delete";
 /*
 Gamer Blog To Do List
 
-We need to keep the max recent blog posts to like 3 or 4,
+
 Clickable link to view all blogs in a different component
 Fix broken images
 Move Links to the right side of top navbar or open a side tab
