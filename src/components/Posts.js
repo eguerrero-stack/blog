@@ -4,6 +4,7 @@ import * as actions from "../actions/PostActions"
 import {Paper, Card, CardActionArea, CardActions, CardMedia, CardContent, Typography, Button, Grid, withStyles, ButtonGroup} from "@material-ui/core"
 import Edit from "@material-ui/icons/Edit";
 import Delete from "@material-ui/icons/Delete";
+import { Link } from "react-router-dom";
 
 /*
 Gamer Blog To Do List
@@ -40,7 +41,7 @@ const styles = theme => ({
 
 
 const Posts = ({classes, ...props}) => {
-// const [currentId, setCurrentId] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
 
 const postId = useRef(0);
 
@@ -99,21 +100,20 @@ const postId = useRef(0);
                                 <Typography gutterBottom variant="h6" component="h6">
                                   {post.title}
                                 </Typography>
-                                <ButtonGroup variant="text">
-                                  <Button>
-                                      <Edit  color="primary" onClick={(e) =>{
-                                        // console.log("this the component", e.target)
-                                        // setCurrentId(post.id)
-                                        props.history.push({
-                                          pathname: `/post/${post.id}`,
-                                            postId : postId
-                                        })
-                                        }}/>
-                                  </Button>
-                                  <Button>
+                                {/* <ButtonGroup variant="text">
+                                  <Button> */}
+                                    <Link to={{
+                                            pathname: `/post/${post.id}`,
+                                            postToUpdate : post,
+                                            isEditing: true 
+                                        }}>
+                                      <Edit  color="primary" />
+                                        </Link>
+                                  {/* </Button> */}
+                                  {/* <Button> */}
                                       <Delete color="error"/>
-                                  </Button>
-                                </ButtonGroup>
+                                  {/* </Button> */}
+                                {/* </ButtonGroup> */}
                               </CardContent>
                             </CardActionArea>
                           </Card>

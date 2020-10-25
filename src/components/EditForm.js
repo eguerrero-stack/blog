@@ -28,39 +28,42 @@ const styles = theme =>({
 })
 
 
-
+//The initial field values need to be empty fields or the post that is being updated before being passed into the useForm hook
+// currently we have access to isEditing to toggle between the updated post values and empty strings for creating a new post
+// the initial field values currently are undefined
 
 
 const EditForm = ({classes,...props}) => {
-const [currentId, setCurrentId] = useState(0);
-// console.log('this is the current Id', currentId)
 console.log('props',props)
 const postId = props.match.params.id;
-console.log('postId',postId)
-
-const postToUpdate = props.post
+const isEditing = props.location.isEditing
+const postToUpdate = props.location.postToUpdate
 
 useEffect(() => {
 
-    if(postId !== 0){
-        setCurrentId(postId)
-        console.log('current Id changed')
-        props.getPost(postId)
-    }
-
+   updateFieldValues();
+    
 }, [])
 
-useEffect(() => {
-    setValues({postToUpdate});
-    initialFieldValues = postToUpdate
-}, [currentId])
-
 let initialFieldValues = {
-    Title: postToUpdate.title,
-    Subtitle: postToUpdate.subtitle,
-    Description:postToUpdate.description,
-    Tags:postToUpdate.tags
-    
+    Title: '',
+    Subtitle: '',
+    Description:'',
+    Tags:''
+}
+
+
+const updateFieldValues = () => {
+    if(isEditing){
+         initialFieldValues = {
+            Title: postToUpdate.Title,
+            Subtitle: postToUpdate.Subtitle,
+            Description:postToUpdate.Description,
+            Tags:postToUpdate.Tags
+        }
+        console.log('These are my initial field values',initialFieldValues)
+    }
+     
 }
 
 
@@ -80,7 +83,6 @@ const validate = (fieldValues = values) => {
 
 if(fieldValues === values){
     let isValidated = Object.values(temp).every( x => x === "")
-
     return isValidated;
 }
     
