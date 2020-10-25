@@ -1,13 +1,12 @@
 import React from "react";
 import "./App.css";
-import { store } from "./actions/store";
-import { Provider } from "react-redux";
 import Posts from './components/Posts';
 import EditForm from './components/EditForm';
 import NavBar from './components/NavBar';
 import PostForm from './components/PostForm';
 import Form from './components/PostForm';
-
+import { Provider } from "react-redux";
+import { store } from "./actions/store";
 // import Error from "./components/Error";
 import {  Container  } from "@material-ui/core";
 import { Switch, Route} from "react-router-dom";
@@ -25,14 +24,9 @@ function App() {
             {/* <Route component={Error}/> */}
         </Container>
     </Switch>
-
-    {/* 
-        <Container maxWidth="lg">
-          <Posts/>
-        </Container>
-    */}
+</Provider>
     
-  </Provider>
+
   )
 }
 
