@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 const useForm = (initialFieldValues, validate) => {
-    console.log('initial field values', initialFieldValues)
     const [values,setValues] = useState(initialFieldValues)
     const [errors,setErrors] = useState({});
 
