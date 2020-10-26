@@ -27,43 +27,46 @@ const styles = theme =>({
     }
 })
 
-
-//The initial field values need to be empty fields or the post that is being updated before being passed into the useForm hook
-// currently we have access to isEditing to toggle between the updated post values and empty strings for creating a new post
-// the initial field values currently are undefined
-
+// Main problem here is that page refreshes after typing and nothing is being added to edit form
+// if receiving props then change state to keep form values?
 
 const EditForm = ({classes,...props}) => {
 console.log('props',props)
 const postId = props.match.params.id;
 const isEditing = props.location.isEditing
-const postToUpdate = props.location.postToUpdate
+const postToUpdate = props.post 
 
-useEffect(() => {
-
-   updateFieldValues();
-    
-}, [])
-
-let initialFieldValues = {
-    Title: '',
-    Subtitle: '',
-    Description:'',
-    Tags:''
+const initialFieldValues = {
+    title: '',
+    subtitle: '',
+    description:'',
+    tags:''
 }
 
 
-const updateFieldValues = () => {
+useEffect(() => {
+console.log(isEditing)
     if(isEditing){
-         initialFieldValues = {
-            Title: postToUpdate.Title,
-            Subtitle: postToUpdate.Subtitle,
-            Description:postToUpdate.Description,
-            Tags:postToUpdate.Tags
-        }
-        console.log('These are my initial field values',initialFieldValues)
+    props.getPost(postId)
+    console.log('grabbing post')
     }
-     
+
+    console.log('post to update', postToUpdate)
+
+    if(postToUpdate){
+        updateFieldValues(postToUpdate)
+    }else{
+        console.log('creating new post');
+    }
+       
+}, [])
+
+
+
+
+const updateFieldValues = (post) => {  
+         setValues(post)
+        console.log('setField Values')  
 }
 
 
@@ -71,11 +74,11 @@ const updateFieldValues = () => {
 const validate = (fieldValues = values) => {
     let temp = {};
     if('Title' in fieldValues)
-    temp.Title = fieldValues.Title ? "" : "This field is required"
+    temp.title = fieldValues.title ? "" : "This field is required"
     if('Description' in fieldValues)
-    temp.Description = fieldValues.Description ? "" : "This field is required"
+    temp.description = fieldValues.description ? "" : "This field is required"
     if('Tags' in fieldValues)
-    temp.Tags = fieldValues.Tags ? "" : "This field is required"
+    temp.tags = fieldValues.tags ? "" : "This field is required"
     // temp.email = (/^$|.+@.+..+/).test(values.email) ? "" : This field is not valid this is how to validate email in regular expression
     setErrors({
         ...temp,
@@ -104,7 +107,10 @@ const {
         e.preventDefault();
 
         if(validate()){
-            props.updatePost(postId, values, () =>{window.alert('updated')})
+            if(isEditing){
+
+                props.updatePost(postId, values, () =>{window.alert('updated')})
+            }
         }
     }
 
@@ -121,10 +127,10 @@ const {
                             name="Title"
                             variant="outlined"
                             label="Title"
-                            value={values.Title}
+                            value={values.title}
                             onChange={handleInputChange}
                             fullWidth
-                            {...(errors.Title && {error: true, helperText: errors.Title})}
+                            {...(errors.title && {error: true, helperText: errors.title})}
                         />
                     </Grid>
                         <Grid item xs={5} className={classes.margin}>
@@ -133,7 +139,7 @@ const {
                                  name="Subtitle"
                                  variant="outlined"
                                  label="Subtitle"
-                                 value={values.Subtitle}
+                                 value={values.subtitle}
                                  onChange={handleInputChange}
                             fullWidth
                             />
@@ -141,11 +147,11 @@ const {
                     </>
             </Grid>
                 
-                <FormControl variant="outlined" className={classes.formControl} {...(errors.Tags && {error: true})}>
+                <FormControl variant="outlined" className={classes.formControl} {...(errors.tags && {error: true})}>
                     <InputLabel ref={inputLabel}>Games</InputLabel>
                     <Select
                     name="Tags"
-                    value={values.Tags}
+                    value={values.tags}
                     onChange={handleInputChange}
                     labelWidth={labelWidth}
                     
@@ -158,7 +164,7 @@ const {
                     <MenuItem value ="Spellbreak">Spellbreak</MenuItem>
                     <MenuItem value ="Stick Fight: The Game">Stick Fight: The Game</MenuItem>
                     </Select>
-                    {errors.Tags && <FormHelperText>{errors.Tags}</FormHelperText>}
+                    {errors.tags && <FormHelperText>{errors.tags}</FormHelperText>}
                 </FormControl>
                 <Grid item xs={12} className={classes.margin} >
 
@@ -166,13 +172,13 @@ const {
                 name="Description"
                 variant="outlined"
                 label="Description"
-                value={values.Description}
+                value={values.description}
                 onChange={handleInputChange}
                 multiline
                 rows={8}
                 rowsMax={12}
                 fullWidth
-                {...(errors.Description && {error: true, helperText: errors.Description})}
+                {...(errors.description && {error: true, helperText: errors.description})}
 
                 />
 

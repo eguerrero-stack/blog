@@ -85,8 +85,8 @@ const postId = useRef(0);
                 Recent Blogs
                 {
                     props.PostsList.reverse().map((post, index)=>{
-                      console.log(post)
                       if(index < 3){
+                        console.log(post)
                         return(
                             <Card key ={index}  ref={postId} >
                             <CardActionArea >
