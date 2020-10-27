@@ -6,6 +6,7 @@ const useForm = (initialFieldValues, validate) => {
 
 
     const handleInputChange = e => {
+        console.log('e. target',e.target)
         const {name,value} = e.target;
         const fieldValue = {[name]: value}
         setValues({

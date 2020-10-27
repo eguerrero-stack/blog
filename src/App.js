@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import Posts from './components/Posts';
+import Posts from './components/Home';
 import EditForm from './components/EditForm';
 import NavBar from './components/NavBar';
 import PostForm from './components/PostForm';
