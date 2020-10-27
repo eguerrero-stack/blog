@@ -29,7 +29,7 @@ const styles = theme =>({
 
 // Main problem here is that page refreshes after typing and nothing is being added to edit form
 // if receiving props then change state to keep form values?
-
+// Update is keeping the value from what was on it previously
 const EditForm = ({classes,...props}) => {
 console.log('props',props)
 const postId = props.match.params.id;
@@ -46,33 +46,31 @@ const initialFieldValues = {
 
 useEffect(() => {
 console.log(isEditing)
-    if(isEditing){
+    if(isEditing || isEditing === undefined){
     props.getPost(postId)
     console.log('grabbing post')
     }
 
     console.log('post to update', postToUpdate)
 
+      
+}, [])
+
+useEffect(() => {
     if(postToUpdate){
-        updateFieldValues(postToUpdate)
+        setValues(postToUpdate)
+        console.log('setField Values')  
+
     }else{
         console.log('creating new post');
     }
-       
-}, [])
+    
+},[postToUpdate])
 
 
-
-
-const updateFieldValues = (post) => {  
-         setValues(post)
-        console.log('setField Values')  
-}
-
-
-//Instead of checking for a value maybe check if the value is not the same as it was before or add two checks?
 const validate = (fieldValues = values) => {
     let temp = {};
+    console.log('these are my field values',fieldValues)
     if('Title' in fieldValues)
     temp.title = fieldValues.title ? "" : "This field is required"
     if('Description' in fieldValues)
@@ -114,6 +112,15 @@ const {
         }
     }
 
+    const reset = () =>{
+        const emptyFields = {
+            title: '',
+            subtitle: '',
+            description:'',
+            tags:''
+        }
+        setValues(emptyFields)
+    }
 
 
     return (
@@ -154,8 +161,6 @@ const {
                     value={values.tags}
                     onChange={handleInputChange}
                     labelWidth={labelWidth}
-                    
-
                     >
                      <MenuItem value ="">Select Game</MenuItem>   
                     <MenuItem value ="Apex Legends">Apex Legends</MenuItem>
@@ -169,7 +174,7 @@ const {
                 <Grid item xs={12} className={classes.margin} >
 
                 <TextField 
-                name="Description"
+                name="description"
                 variant="outlined"
                 label="Description"
                 value={values.description}
@@ -184,7 +189,7 @@ const {
 
             </Grid>
             <div>
-                <Button variant="contained" className={classes.margin}>             
+                <Button variant="contained" className={classes.margin} onClick={()=> reset()}>             
                     Reset
                 </Button>
                 

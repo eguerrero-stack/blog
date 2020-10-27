@@ -30,6 +30,10 @@ const styles = theme => ({
         //   margin: theme.spacing(3),
         // }
     },
+    media:{
+      height: 500,
+
+    },
     grid:{
         margin:theme.spacing(2),
         padding:theme.spacing(1)
@@ -47,10 +51,9 @@ const postId = useRef(0);
 
   console.log('props',props)
     useEffect(() => {
-      console.log('firing effect')
         props.fetchAllPosts()
       },
-         []);//Component did mount
+         []);
 
     return (
         <Paper elevation={3}>
@@ -61,8 +64,8 @@ const postId = useRef(0);
         <CardMedia
           component="img"
         //   alt="Shen"
-          height="500"
-          image="../images/332687.jpg"
+          className={classes.media}
+          src="../images/332687.jpg"
           title="League Of Legends"
         />
         <CardContent>
@@ -107,11 +110,13 @@ const postId = useRef(0);
                                             postToUpdate : post,
                                             isEditing: true 
                                         }}>
-                                      <Edit  color="primary" />
+                                      <Edit  color="primary"/>
                                         </Link>
                                   {/* </Button> */}
                                   {/* <Button> */}
-                                      <Delete color="error"/>
+                                      <Delete color="error" onClick={()=>{
+                                        props.Delete(post.id)
+                                      }}/>
                                   {/* </Button> */}
                                 {/* </ButtonGroup> */}
                               </CardContent>
@@ -141,7 +146,8 @@ const mapStateToProps = state =>(
 )
 
 const mapActionToProps = {
-    fetchAllPosts: actions.FetchAll
+    fetchAllPosts: actions.FetchAll,
+    Delete: actions.Delete
 }
 
 
